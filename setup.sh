@@ -447,7 +447,7 @@ else
     echo ""
     echo -e "1. ${BLUE}MongoDB 認證失敗${NC}（UserNotFound 錯誤）："
     echo "   • 可能存在衝突的 Docker 卷或容器"
-    echo "   • 解決方案：docker-compose down -v && ./setup.sh"
+    echo "   • 解決方案：docker-compose down && ./setup.sh"
     echo ""
     echo -e "2. ${BLUE}端口被占用${NC}（port already in use）："
     echo "   • 檢查端口使用：lsof -i :3000 -i :8000 -i :27018"
