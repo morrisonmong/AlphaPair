@@ -122,7 +122,7 @@ AlphaPair 是一個功能完整的配對交易系統，支援幣安合約交易�
 
 **方法一：使用瀏覽器下載**
 
-1. 點擊的 "Code" 按鈕
+1. 點擊 "Code" 按鈕
 2. 選擇 "Download ZIP" 並解壓縮到您想要的資料夾
 3. 開啟該資料夾
 
@@ -239,10 +239,10 @@ MONITOR_ERROR_RETRY_INTERVAL=5
 
 1. 在瀏覽器中開啟 http://localhost:3000
    - 若電腦有固定 IP 可以開啟 http://{IP}:3000，這樣外出時也可以連線使用
-3. 點擊「註冊」按鈕
-4. 填寫用戶名、電子郵件和密碼
-5. 點擊「註冊」完成帳戶創建
-6. 使用新帳戶登入
+2. 點擊「註冊」按鈕
+3. 填寫用戶名、電子郵件和密碼
+4. 點擊「註冊」完成帳戶創建
+5. 使用新帳戶登入
 
 #### 2. 設定幣安 API 密鑰 (必要步驟)
 
@@ -310,36 +310,36 @@ MONITOR_ERROR_RETRY_INTERVAL=5
 
 ```bash
 # 查看服務狀態
-docker-compose ps
+docker-compose -p alphapair ps
 
 # 啟動所有服務
-docker-compose up -d
+docker-compose -p alphapair up -d
 
 # 停止服務
-docker-compose down
+docker-compose -p alphapair down
 
 # 重啟服務
-docker-compose restart
+docker-compose -p alphapair restart
 
 # 重啟特定服務
-docker-compose restart api
-docker-compose restart frontend
-docker-compose restart mongodb
+docker-compose -p alphapair restart api
+docker-compose -p alphapair restart frontend
+docker-compose -p alphapair restart mongodb
 ```
 
 ### 📝 服務日誌查看
 
 ```bash
 # 查看所有服務日誌
-docker-compose logs
+docker-compose -p alphapair logs
 
 # 即時查看日誌 (按 Ctrl+C 退出)
-docker-compose logs -f
+docker-compose -p alphapair logs -f
 
 # 查看特定服務日誌
-docker-compose logs api
-docker-compose logs frontend
-docker-compose logs mongodb
+docker-compose -p alphapair logs api
+docker-compose -p alphapair logs frontend
+docker-compose -p alphapair logs mongodb
 ```
 
 ### 🔄 更新和維護
@@ -353,11 +353,11 @@ docker-compose logs mongodb
 
 ```bash
 # 重新創建
-docker-compose build
+docker-compose -p alphapair build
 # 停止服務
-docker-compose down
+docker-compose -p alphapair down
 # 重新啟動
-docker-compose up -d
+docker-compose -p alphapair up -d
 ```
 
 ## 🐛 故障排除
@@ -371,14 +371,14 @@ docker-compose up -d
 1. **檢查 Docker 是否運行**
 
 ```bash
-docker-compose ps
+docker-compose -p alphapair ps
 ```
 
 如果看到服務狀態不是 "Up"，請重新啟動：
 
 ```bash
-docker-compose down
-docker-compose up -d
+docker-compose -p alphapair down
+docker-compose -p alphapair up -d
 ```
 
 2. **檢查端口是否被其他服務占用**
@@ -416,7 +416,7 @@ cp .env.example .env
 nano .env  # 或使用其他編輯器
 
 # 啟動服務
-docker-compose up -d
+docker-compose -p alphapair up -d
 ```
 
 #### 問題 3: 服務啟動失敗
@@ -426,22 +426,22 @@ docker-compose up -d
 1. **查看詳細錯誤**
 
 ```bash
-docker-compose logs
+docker-compose -p alphapair logs
 ```
 
 2. **重新構建映像**
 
 ```bash
-docker-compose down
-docker-compose up -d --build
+docker-compose -p alphapair down
+docker-compose -p alphapair up -d --build
 ```
 
 3. **清理並重新開始**
 
 ```bash
-docker-compose down -v
+docker-compose -p alphapair down -v
 docker system prune -f
-docker-compose up -d --build
+docker-compose -p alphapair up -d --build
 ```
 
 ### 🆘 獲取幫助

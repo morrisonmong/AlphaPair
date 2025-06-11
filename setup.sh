@@ -138,7 +138,7 @@ if [ -n "$existing_containers" ] || [ -n "$existing_volumes" ]; then
                     
                     # 停止並移除容器和數據卷
                     echo "  停止並移除所有容器和數據卷..."
-                    docker-compose down -v 2>/dev/null || true
+                    docker-compose -p alphapair down -v 2>/dev/null || true
                     
                     echo -e "${GREEN}✅ 清理完成，準備重新安裝${NC}"
                     echo ""
@@ -157,18 +157,18 @@ if [ -n "$existing_containers" ] || [ -n "$existing_volumes" ]; then
                 echo "🔄 升級到最新版本："
                 echo "   下載新的程式碼"
                 echo "   執行以下指令進行更新！"
-                echo "   docker-compose build"
-                echo "   docker-compose down"
-                echo "   docker-compose up -d"
+                echo "   docker-compose -p alphapair build"
+                echo "   docker-compose -p alphapair down"
+                echo "   docker-compose -p alphapair up -d"
                 echo ""
                 echo "📊 查看狀態和日誌："
-                echo "   • 運行狀態：docker-compose ps"
-                echo "   • 查看日誌：docker-compose logs"
-                echo "   • 重啟服務：docker-compose restart"
+                echo "   • 運行狀態：docker-compose -p alphapair ps"
+                echo "   • 查看日誌：docker-compose -p alphapair logs"
+                echo "   • 重啟服務：docker-compose -p alphapair restart"
                 echo ""
                 echo "🆘 如遇問題："
-                echo "   • 重啟所有服務：docker-compose restart"
-                echo "   • 重建容器：docker-compose up -d --build"
+                echo "   • 重啟所有服務：docker-compose -p alphapair restart"
+                echo "   • 重建容器：docker-compose -p alphapair up -d --build"
                 echo ""
                 echo "更多資訊請參考 README.md"
                 exit 0
@@ -427,7 +427,7 @@ fi
 
 # 停止現有服務（如果有）
 echo "🛑 停止現有服務..."
-docker-compose down 2>/dev/null || true
+docker-compose -p alphapair down 2>/dev/null || true
 echo ""
 
 # 構建並啟動服務
@@ -435,19 +435,19 @@ echo "🔨 構建並啟動 AlphaPair 服務..."
 echo "這可能需要幾分鐘時間，請耐心等待..."
 echo ""
 
-if docker-compose up -d --build; then
+if docker-compose -p alphapair up -d --build; then
     echo -e "${GREEN}✅ 服務啟動成功${NC}"
 else
     echo -e "${RED}❌ 服務啟動失敗${NC}"
     echo ""
     echo "錯誤詳情："
-    docker-compose logs --tail=20
+    docker-compose -p alphapair logs --tail=20
     echo ""
     echo -e "${YELLOW}常見問題和解決方案：${NC}"
     echo ""
     echo -e "1. ${BLUE}MongoDB 認證失敗${NC}（UserNotFound 錯誤）："
     echo "   • 可能存在衝突的 Docker 卷或容器"
-    echo "   • 解決方案：docker-compose down && ./setup.sh"
+    echo "   • 解決方案：docker-compose -p alphapair down && ./setup.sh"
     echo ""
     echo -e "2. ${BLUE}端口被占用${NC}（port already in use）："
     echo "   • 檢查端口使用：lsof -i :3000 -i :8000 -i :27018"
@@ -462,10 +462,10 @@ else
     echo "   • 確保 Docker Desktop 正在運行"
     echo ""
     echo -e "${BLUE}📋 詳細診斷命令：${NC}"
-    echo "   • 查看完整日誌：docker-compose logs"
-    echo "   • 查看特定服務：docker-compose logs mongodb"
-    echo "   • 檢查容器狀態：docker-compose ps"
-    echo "   • 重新安裝：docker-compose down -v && ./setup.sh"
+    echo "   • 查看完整日誌：docker-compose -p alphapair logs"
+    echo "   • 查看特定服務：docker-compose -p alphapair logs mongodb"
+    echo "   • 檢查容器狀態：docker-compose -p alphapair ps"
+    echo "   • 重新安裝：docker-compose -p alphapair down -v && ./setup.sh"
     echo ""
     echo "如果問題持續，請將錯誤訊息提供給技術支援。"
     exit 1
@@ -479,7 +479,7 @@ sleep 15
 
 # 檢查服務狀態
 echo "🔍 檢查服務狀態..."
-docker-compose ps
+docker-compose -p alphapair ps
 echo ""
 
 # 檢查 API 健康狀態
@@ -531,15 +531,15 @@ else
     echo "   🌐 前端界面: http://localhost:3000"
     echo ""
     echo "如果服務無法正常訪問，請執行以下命令檢查："
-    echo "   docker-compose logs"
+    echo "   docker-compose -p alphapair logs"
 fi
 
 echo ""
 echo "📋 常用管理命令："
-echo "   查看狀態: docker-compose ps"
-echo "   查看日誌: docker-compose logs -f"
-echo "   停止服務: docker-compose down"
-echo "   重啟服務: docker-compose restart"
+echo "   查看狀態: docker-compose -p alphapair ps"
+echo "   查看日誌: docker-compose -p alphapair logs -f"
+echo "   停止服務: docker-compose -p alphapair down"
+echo "   重啟服務: docker-compose -p alphapair restart"
 echo ""
 echo "🔒 安全提醒："
 echo "   1. 您的資料庫密碼和密鑰已安全儲存在 .env 檔案中"
