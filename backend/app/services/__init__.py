@@ -1,0 +1,7 @@
+from app.services.trade_history_service import trade_history_service
+from app.services.notification_service import notification_service
+from app.services.user_settings_service import user_settings_service
+from app.services.equity_curve_service import equity_curve_service
+from app.services.trade_performance_service import trade_performance_service
+from app.services.market_performance_service import market_performance_service
+from app.services.trade_log_service import trade_log_service

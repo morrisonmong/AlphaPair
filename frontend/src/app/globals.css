@@ -1,0 +1,169 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #0a0e1a;
+  --foreground: #e2e8f0;
+  
+  --card: #1a1f2e;
+  --card-foreground: #e2e8f0;
+  
+  --popover: #1a1f2e;
+  --popover-foreground: #e2e8f0;
+  
+  --primary: #5d6d9e;
+  --primary-foreground: #ffffff;
+  
+  --secondary: #1e293b;
+  --secondary-foreground: #cbd5e1;
+  
+  --muted: #1e293b;
+  --muted-foreground: #64748b;
+  
+  --accent: #beb287;
+  --accent-foreground: #1a1f2e;
+  
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  
+  --border: #2d3748;
+  --input: #2d3748;
+  --ring: #5d6d9e;
+  
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  :root {
+    --chart-1: 0 84% 60%; /* 紅色 (虧損) */
+    --chart-2: 142 76% 36%; /* 綠色 (盈利) */
+    --chart-3: 225 25% 55%; /* 藍灰色 (#5d6d9e) */
+    --chart-4: 262 83% 58%; /* 紫色 */
+    --chart-5: 45 35% 63%; /* 金黃色 (#beb287) */
+  }
+ 
+  .dark {
+    --chart-1: 0 84% 60%; /* 鮮豔紅色 (虧損) */
+    --chart-2: 142 76% 36%; /* 鮮豔綠色 (盈利) */
+    --chart-3: 225 25% 55%; /* 藍灰色 (#5d6d9e) */
+    --chart-4: 262 83% 58%; /* 鮮豔紫色 */
+    --chart-5: 45 35% 63%; /* 金黃色 (#beb287) */
+  }
+}
+
+/* 自定義16欄網格佈局 */
+.grid-cols-16 {
+  grid-template-columns: repeat(16, minmax(0, 1fr));
+}
+
+.col-span-16 {
+  grid-column: span 16 / span 16;
+}
+
+/* 自定義通知樣式 */
+.toast-custom {
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.toast-custom[data-type="success"] {
+  background-color: #065f46;
+  border: 1px solid #047857;
+}
+
+.toast-custom[data-type="error"] {
+  background-color: #991b1b;
+  border: 1px solid #b91c1c;
+}
+
+.toast-custom[data-type="info"] {
+  background-color: #1e40af;
+  border: 1px solid #1d4ed8;
+}
+
+.toast-custom[data-type="warning"] {
+  background-color: #92400e;
+  border: 1px solid #b45309;
+}
+
+/* 自訂捲軸樣式 */
+.custom-scrollbar {
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(156, 163, 175, 0.6) rgba(55, 65, 81, 0.3);
+}
+
+/* Webkit 瀏覽器 (Chrome, Safari, Edge) */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(55, 65, 81, 0.3);
+  border-radius: 4px;
+  margin: 2px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.6);
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.8);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:active {
+  background: rgba(156, 163, 175, 1);
+}
+
+.custom-scrollbar::-webkit-scrollbar-corner {
+  background: rgba(55, 65, 81, 0.3);
+}
+
+/* 表格專用的更細緻捲軸 */
+.table-scrollbar {
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(93, 109, 158, 0.6) rgba(45, 55, 72, 0.4);
+}
+
+.table-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.table-scrollbar::-webkit-scrollbar-track {
+  background: rgba(45, 55, 72, 0.4);
+  border-radius: 3px;
+  margin: 1px;
+}
+
+.table-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(93, 109, 158, 0.6);
+  border-radius: 3px;
+  transition: all 0.2s ease;
+}
+
+.table-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(93, 109, 158, 0.8);
+  transform: scaleY(1.1);
+}
+
+.table-scrollbar::-webkit-scrollbar-thumb:active {
+  background: rgba(93, 109, 158, 1);
+}
+
+.table-scrollbar::-webkit-scrollbar-corner {
+  background: rgba(45, 55, 72, 0.4);
+}

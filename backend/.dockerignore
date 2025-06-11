@@ -1,0 +1,99 @@
+﻿# Git
+
+.git
+
+.gitignore
+
+
+
+# Python
+
+__pycache__/
+
+*.py[cod]
+
+*$py.class
+
+*.so
+
+.Python
+
+env/
+
+venv/
+
+ENV/
+
+
+
+# IDE
+
+.idea/
+
+.vscode/
+
+
+
+# ?亥?
+
+*.log
+
+
+
+# ?砍?啣??辣
+
+.env.local
+
+.env.development.local
+
+.env.test.local
+
+.env.production.local
+
+
+
+# Docker
+
+Dockerfile
+
+.dockerignore
+
+docker-compose.yml
+
+
+
+# ?嗡?
+
+.DS_Store
+
+node_modules/
+
+npm-debug.log*
+
+yarn-debug.log*
+
+yarn-error.log*
+
+
+
+# 開發環境文件
+node_modules
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+.git
+.github
+.vscode
+
+# 測試文件
+__tests__
+coverage
+
+# 構建輸出
+.next
+out
+
+# 其他不需要的文件
+README.md
+.env.local
+.env.development

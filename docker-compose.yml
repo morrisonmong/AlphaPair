@@ -1,0 +1,169 @@
+﻿services:
+  # MongoDB 資料庫
+  mongodb:
+    image: mongo:8.0
+    container_name: alphapair-mongodb
+    restart: always
+    ports:
+      - "${MONGODB_PORT:-27018}:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=${MONGODB_DB:-alphapair}
+      - MONGO_INITDB_ROOT_USERNAME=${MONGODB_ROOT_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_ROOT_PASSWORD}
+    command: ["mongod", "--auth"]
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "${LOG_MAX_SIZE:-10m}"
+        max-file: "${LOG_MAX_FILES:-3}"
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh --host localhost:27017 --username ${MONGODB_ROOT_USER} --password ${MONGODB_ROOT_PASSWORD} --authenticationDatabase admin --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - alphapair-network
+
+  # API 服務
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: alphapair-api:latest
+    container_name: alphapair-api
+    restart: always
+    ports:
+      - "${API_PORT:-8000}:8000"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    environment:
+      - MONGODB_URL=mongodb://${MONGODB_ROOT_USER}:${MONGODB_ROOT_PASSWORD}@mongodb:27017/${MONGODB_DB:-alphapair}?authSource=admin
+      - MONGODB_DB=${MONGODB_DB:-alphapair}
+
+      # MongoDB 連接優化
+      - MONGODB_SERVER_SELECTION_TIMEOUT_MS=${MONGODB_SERVER_SELECTION_TIMEOUT_MS:-5000}
+      - MONGODB_CONNECT_TIMEOUT_MS=${MONGODB_CONNECT_TIMEOUT_MS:-5000}
+      - MONGODB_SOCKET_TIMEOUT_MS=${MONGODB_SOCKET_TIMEOUT_MS:-10000}
+      - MONGODB_MAX_POOL_SIZE=${MONGODB_MAX_POOL_SIZE:-50}
+      - MONGODB_MAX_RETRIES=${MONGODB_MAX_RETRIES:-5}
+      - MONGODB_RETRY_DELAY=${MONGODB_RETRY_DELAY:-2}
+
+      # 服務配置
+      - HOST=0.0.0.0
+      - PORT=8000
+      - ENVIRONMENT=${ENVIRONMENT:-production}
+      - IS_DOCKER=true
+      - PYTHONPATH=/app
+
+      # JWT 配置
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - ALGORITHM=${JWT_ALGORITHM:-HS256}
+      - ACCESS_TOKEN_EXPIRE_MINUTES=${JWT_EXPIRATION:-240}
+
+      # 加密配置
+      - SECRET_KEY=${SECRET_KEY}
+      - CRYPTO_SALT=${CRYPTO_SALT}
+
+      # 資產快照排程配置
+      - ASSET_SNAPSHOT_HOURS=${ASSET_SNAPSHOT_HOURS:-0,8,16} # 每天 0, 8, 16 點進行快照
+      - ASSET_SNAPSHOT_MINUTE=${ASSET_SNAPSHOT_MINUTE:-0} # 每天 0 分進行快照
+    volumes:
+      # 持久化日誌 (可選)
+      - ./logs:/app/logs
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "${LOG_MAX_SIZE:-10m}"
+        max-file: "${LOG_MAX_FILES:-3}"
+    networks:
+      - alphapair-network
+    command: python /app/run.py --mode api
+
+  # 監控服務
+  monitor:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: alphapair-monitor:latest
+    container_name: alphapair-monitor
+    restart: always
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      api:
+        condition: service_started
+    environment:
+      - MONGODB_URL=mongodb://${MONGODB_ROOT_USER}:${MONGODB_ROOT_PASSWORD}@mongodb:27017/${MONGODB_DB:-alphapair}?authSource=admin
+      - MONGODB_DB=${MONGODB_DB:-alphapair}
+
+      # MongoDB 連接優化
+      - MONGODB_SERVER_SELECTION_TIMEOUT_MS=${MONGODB_SERVER_SELECTION_TIMEOUT_MS:-5000}
+      - MONGODB_CONNECT_TIMEOUT_MS=${MONGODB_CONNECT_TIMEOUT_MS:-5000}
+      - MONGODB_SOCKET_TIMEOUT_MS=${MONGODB_SOCKET_TIMEOUT_MS:-10000}
+      - MONGODB_MAX_POOL_SIZE=${MONGODB_MAX_POOL_SIZE:-50}
+      - MONGODB_MAX_RETRIES=${MONGODB_MAX_RETRIES:-5}
+      - MONGODB_RETRY_DELAY=${MONGODB_RETRY_DELAY:-2}
+
+      # 服務配置
+      - ENVIRONMENT=${ENVIRONMENT:-production}
+      - IS_DOCKER=true
+      - PYTHONPATH=/app
+
+      # JWT/加密配置
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - SECRET_KEY=${SECRET_KEY}
+      - CRYPTO_SALT=${CRYPTO_SALT}
+
+      # 監控配置
+      - MONITOR_UPDATE_INTERVAL=${MONITOR_UPDATE_INTERVAL:-1}
+      - MONITOR_ERROR_RETRY_INTERVAL=${MONITOR_ERROR_RETRY_INTERVAL:-5}
+
+      # 資產快照排程配置
+      - ASSET_SNAPSHOT_HOURS=${ASSET_SNAPSHOT_HOURS:-0,8,16} # 每天 0, 8, 16 點進行快照
+      - ASSET_SNAPSHOT_MINUTE=${ASSET_SNAPSHOT_MINUTE:-0} # 每天 0 分進行快照
+
+    volumes:
+      # 持久化日誌
+      - ./logs:/app/logs
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "${LOG_MAX_SIZE:-10m}"
+        max-file: "${LOG_MAX_FILES:-3}"
+    networks:
+      - alphapair-network
+    command: python /app/run.py --mode monitor
+
+  # 前端服務
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: alphapair-frontend:latest
+    container_name: alphapair-frontend
+    restart: always
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+    depends_on:
+      - api
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "${LOG_MAX_SIZE:-10m}"
+        max-file: "${LOG_MAX_FILES:-3}"
+    networks:
+      - alphapair-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  alphapair-network:
+    driver: bridge

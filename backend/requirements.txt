@@ -1,0 +1,32 @@
+fastapi==0.115.2
+uvicorn==0.34.0
+motor==3.6.0  # 異步 MongoDB 客戶端
+pymongo==4.9.0
+pydantic==2.9.2  # 數據驗證和設置管理
+pydantic-settings==2.7.1  # 添加 pydantic-settings 依賴
+python-jose==3.4.0
+passlib==1.7.4
+python-multipart==0.0.20 # 多部分上傳
+python-dotenv==1.0.1
+httpx==0.28.1
+cryptography==44.0.0
+uvloop==0.21.0; sys_platform != "win32"  # 高性能事件循環，不支持 Windows
+colorlog==6.9.0  # 彩色日誌輸出
+
+# 加密
+bcrypt==4.2.1
+binance-connector==3.11.0
+
+# 事件循環優化
+python-binance==1.0.29
+pandas==2.2.3
+numpy==2.0.2  # 支援 Python 3.10+ 的穩定版本
+requests==2.32.3
+email-validator==2.2.0
+pytz==2025.2  # 時區處理
+
+# 測試依賴
+pytest==8.3.4
+pytest-asyncio==0.21.1
+openpyxl==3.1.5  # for Excel testing
+xlsxwriter==3.2.0  # for Excel export
