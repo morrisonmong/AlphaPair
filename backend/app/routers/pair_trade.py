@@ -441,7 +441,7 @@ async def close_pair_trade(
         pair_trade = await pair_trade_service.close_pair_trade(
             trade_id=trade_id,
             user_id=current_user.id,
-            close_reason="手動平倉",
+            close_reason="manual",
             binance_service=binance_service
         )
 

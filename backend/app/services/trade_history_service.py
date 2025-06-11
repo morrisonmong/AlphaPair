@@ -68,7 +68,7 @@ class TradeHistoryService:
 
             # 為活躍交易提供默認值
             closed_at = trade.closed_at if trade.closed_at else trade.updated_at
-            close_reason = trade.close_reason if hasattr(trade, 'close_reason') and trade.close_reason else "手動平倉"
+            close_reason = trade.close_reason if hasattr(trade, 'close_reason') and trade.close_reason else "manual"
 
             # 創建 long_position 和 short_position
             long_position_data = None
