@@ -1543,8 +1543,16 @@ function TradeHistoryPage() {
                       {visibleColumns.includes('stopCondition') && (
                         <td className="p-2 md:p-3 text-center w-[7%]">
                           <div className="text-xs grid grid-cols-[1fr] gap-x-1">
-                            <div className="text-center text-green-500">{history.take_profit}%</div>                         
-                            <div className="text-center text-red-500">{history.stop_loss}%</div>
+                            <div className="text-center text-green-500">
+                              {history.take_profit !== null && history.take_profit !== undefined 
+                                ? `${history.take_profit}%` 
+                                : '-'}
+                            </div>                         
+                            <div className="text-center text-red-500">
+                              {history.stop_loss !== null && history.stop_loss !== undefined 
+                                ? `${history.stop_loss}%` 
+                                : '-'}
+                            </div>
                           </div>
                         </td>
                       )}

@@ -2661,9 +2661,17 @@ class PairTradeService:
             logger.info(f"交易 {trade_id}: 停利保護{'啟用' if settings.trailing_stop_enabled else '停用'}")
 
         if settings.trailing_stop_level is not None:
-            if settings.trailing_stop_level <= 0:
-                logger.warning(f"交易 {trade_id} 的停利水位必須大於 0，收到: {settings.trailing_stop_level}")
+            # 只有當停利模式啟用時，才驗證停利水位必須 >= 0
+            # 檢查當前或即將設定的 trailing_stop_enabled 狀態
+            is_trailing_enabled = settings.trailing_stop_enabled
+            if is_trailing_enabled is None:
+                # 如果本次請求沒有設定 trailing_stop_enabled，則使用資料庫中的值
+                is_trailing_enabled = trade_doc.get("trailing_stop_enabled", False)
+
+            if is_trailing_enabled and settings.trailing_stop_level < 0:
+                logger.warning(f"交易 {trade_id} 在停利模式下，停利水位必須 >= 0，收到: {settings.trailing_stop_level}")
                 return None
+
             update_fields["trailing_stop_level"] = settings.trailing_stop_level
             logger.info(f"交易 {trade_id}: 停利水位更新為 {settings.trailing_stop_level}%")
 
