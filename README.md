@@ -195,7 +195,7 @@ MONITOR_ERROR_RETRY_INTERVAL=5
 - 預設每秒檢查一次配對交易狀態
 - 如果監控間隔設定太長，可能會在需要平倉時造成滑價損失
 - 高頻交易建議維持 1 秒間隔，確保及時平倉
-- 修改後需要重啟服務：`docker-compose restart`（僅重啟，不會重新構建）
+- 修改後需要重啟服務：`docker-compose -p alphapair restart`（僅重啟，不會重新構建）
 
 ### 📝 安裝過程說明
 
@@ -212,7 +212,7 @@ MONITOR_ERROR_RETRY_INTERVAL=5
    - 通用加密密鑰 (64 字符)
    - 加密鹽值 (32 字符)
 4. **生成 .env 檔案** - 包含所有必要的配置，之後您可以透過編輯 .env 檔案來調整系統行為
-5. **啟動服務** - 自動執行 `docker-compose up -d`
+5. **啟動服務** - 自動執行 `docker-compose -p alphapair up -d`
 6. **健康檢查** - 確認所有服務正常運行
 
 ### 🎉 安裝完成
