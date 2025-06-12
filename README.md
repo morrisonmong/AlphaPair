@@ -406,19 +406,6 @@ lsof -i :8000
    - Windows: 檢查右下角中的 Docker 圖示，若沒有，請重新啟動 Docker Desktop
    - macOS: 確認 Docker Desktop 正在運行，若沒有，請重新啟動 Docker Desktop
 
-2. **手動執行安裝步驟**
-
-```bash
-# 複製環境配置
-cp .env.example .env
-
-# 編輯 .env 檔案 (填入您的設定)
-nano .env  # 或使用其他編輯器
-
-# 啟動服務
-docker-compose -p alphapair up -d
-```
-
 #### 問題 3: 服務啟動失敗
 
 **解決方法:**
